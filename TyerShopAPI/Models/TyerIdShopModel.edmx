@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TyerShopDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Sales">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TyerId" Type="int" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="CustomerName" Type="varchar" MaxLength="50" />
+          <Property Name="TransactionDateTime" Type="varchar" MaxLength="50" />
+          <Property Name="CashRecieved" Type="int" />
+        </EntityType>
+        <EntityType Name="Tyers">
+          <Key>
+            <PropertyRef Name="TyerId" />
+          </Key>
+          <Property Name="TyerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Brand" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Size" Type="varchar" MaxLength="50" />
+          <Property Name="Condition" Type="varchar" MaxLength="50" />
+          <Property Name="Purchase_Price" Type="int" />
+          <Property Name="Selling_Price" Type="int" />
+        </EntityType>
+        <Association Name="FK_Sales_ToTable">
+          <End Role="Tyers" Type="Self.Tyers" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tyers">
+              <PropertyRef Name="TyerId" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="TyerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TyerShopDbModelStoreContainer">
+          <EntitySet Name="Sales" EntityType="Self.Sales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tyers" EntityType="Self.Tyers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Sales_ToTable" Association="Self.FK_Sales_ToTable">
+            <End Role="Tyers" EntitySet="Tyers" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TyerShopDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Sale">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TyerId" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TransactionDateTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CashRecieved" Type="Int32" />
+          <NavigationProperty Name="Tyer" Relationship="Self.FK_Sales_ToTable" FromRole="Sales" ToRole="Tyers" />
+        </EntityType>
+        <EntityType Name="Tyer">
+          <Key>
+            <PropertyRef Name="TyerId" />
+          </Key>
+          <Property Name="TyerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Brand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Size" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Condition" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Purchase_Price" Type="Int32" />
+          <Property Name="Selling_Price" Type="Int32" />
+          <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_ToTable" FromRole="Tyers" ToRole="Sales" />
+        </EntityType>
+        <Association Name="FK_Sales_ToTable">
+          <End Role="Tyers" Type="Self.Tyer" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tyers">
+              <PropertyRef Name="TyerId" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="TyerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TyerShopDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Sales" EntityType="Self.Sale" />
+          <EntitySet Name="Tyers" EntityType="Self.Tyer" />
+          <AssociationSet Name="FK_Sales_ToTable" Association="Self.FK_Sales_ToTable">
+            <End Role="Tyers" EntitySet="Tyers" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TyerShopDbModelStoreContainer" CdmEntityContainer="TyerShopDbEntities">
+          <EntitySetMapping Name="Sales">
+            <EntityTypeMapping TypeName="TyerShopDbModel.Sale">
+              <MappingFragment StoreEntitySet="Sales">
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="TyerId" ColumnName="TyerId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="TransactionDateTime" ColumnName="TransactionDateTime" />
+                <ScalarProperty Name="CashRecieved" ColumnName="CashRecieved" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tyers">
+            <EntityTypeMapping TypeName="TyerShopDbModel.Tyer">
+              <MappingFragment StoreEntitySet="Tyers">
+                <ScalarProperty Name="TyerId" ColumnName="TyerId" />
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="Condition" ColumnName="Condition" />
+                <ScalarProperty Name="Purchase_Price" ColumnName="Purchase_Price" />
+                <ScalarProperty Name="Selling_Price" ColumnName="Selling_Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
